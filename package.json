@@ -1,0 +1,29 @@
+{
+  "name": "saylani-discount-store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hamzaali565/saylani-discount-store.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hamzaali565/saylani-discount-store/issues"
+  },
+  "homepage": "https://github.com/Hamzaali565/saylani-discount-store#readme",
+  "dependencies": {
+    "bcrypt-inzi": "^1.0.7",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.9.2",
+    "path": "^0.12.7"
+  }
+}
