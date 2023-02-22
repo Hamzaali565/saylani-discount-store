@@ -6,6 +6,7 @@ import { stringToHash, varifyHash } from "bcrypt-inzi";
 import jwt from "jsonwebtoken";
 import { boolean } from "webidl-conversions";
 import mongoose from "mongoose";
+mongoose.set("strictQuery", false);
 
 const app = express();
 const port = 3001;
@@ -35,7 +36,7 @@ export const userModel = mongoose.model("SaylaniUser", userSchema);
 const productSchema = new mongoose.Schema({
   image: { type: String, required: true },
   itemName: { type: String, required: true },
-  cateegory: { type: String, required: true },
+  category: { type: String, required: true },
   description: { type: String },
   unitName: { type: String, required: true },
   unitPrice: { type: String, required: true },
@@ -46,6 +47,7 @@ export const productModel = mongoose.model("product", productSchema);
 const categorySchema = new mongoose.Schema({
   image: { type: String, required: true },
   categoryName: { type: String, required: true },
+  createdOn: { type: Date, default: Date.now },
 });
 export const categoryModel = mongoose.model("category", categorySchema);
 // ---Costumer Order Api--//
@@ -62,7 +64,133 @@ export const costumerOrderModel = mongoose.model(
   costumerOrderSchema
 );
 
-console.log("fahad");
+//----- ADD PRODUCT API (ADMIN) ------///
+app.post("/api/v1/product", (req, res) => {
+  const body = req.body;
+
+  if (
+    // validation
+    !body.image &&
+    !body.itemName &&
+    !body.category &&
+    !body.description &&
+    !body.unitName &&
+    !body.unitPrice
+  ) {
+    res.status(400).send({
+      message: "required parameters missing",
+    });
+    return;
+  }
+  productModel.create(
+    {
+      image: body.image,
+      itemName: body.itemName,
+      category: body.category,
+      description: body.description,
+      unitName: body.unitName,
+      unitPrice: body.unitPrice,
+      // owner: new mongoose.Types.ObjectId(body.token._id),
+    },
+    (err, saved) => {
+      if (!err) {
+        console.log(saved);
+
+        res.send({
+          message: "product added successfully",
+          // data: data,
+        });
+      } else {
+        res.status(500).send({
+          message: "Product not Added. Please try later.",
+        });
+      }
+    }
+  );
+});
+//----///
+
+//---- ADD CATEGORY API (ADMIN) ---//
+app.post("/api/v1/category", (req, res) => {
+  const body = req.body;
+
+  if (
+    // validation
+    !body.image &&
+    !body.category
+  ) {
+    res.status(400).send({
+      message: "required parameters missing",
+    });
+    return;
+  }
+  categoryModel.create(
+    {
+      image: body.image,
+      categoryName: body.category,
+      // owner: new mongoose.Types.ObjectId(body.token._id),
+    },
+    (err, saved) => {
+      if (!err) {
+        console.log(saved);
+
+        res.send({
+          message: "product added successfully",
+          // data: data,
+        });
+      } else {
+        res.status(500).send({
+          message: "Product not Added. Please try later.",
+        });
+      }
+    }
+  );
+});
+//-----------//
+
+//----- costumerOrderApi API (user) ------///
+app.post("/api/v1/order", (req, res) => {
+  const body = req.body;
+
+  if (
+    // validation
+    !body.ownerName &&
+    !body.status &&
+    !body.name &&
+    !body.phoneNumber &&
+    !body.address
+  ) {
+    res.status(400).send({
+      message: "required parameters missing",
+    });
+    return;
+  }
+  costumerOrderModel.create(
+    {
+      ownerName: body.ownerName,
+      status: body.status,
+      name: body.name,
+      phoneNumber: body.phoneNumber,
+      address: body.address,
+      // owner: new mongoose.Types.ObjectId(body.token._id),
+    },
+    (err, saved) => {
+      if (!err) {
+        console.log(saved);
+
+        res.send({
+          message: "product added successfully",
+          // data: data,
+        });
+      } else {
+        res.status(500).send({
+          message: "Product not Added. Please try later.",
+        });
+      }
+    }
+  );
+});
+//---------------------------------------///
 
 const __dirname = path.resolve();
 app.use("/", express.static(path.join(__dirname, "./Frontend/build")));
