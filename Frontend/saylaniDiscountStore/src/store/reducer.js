@@ -1,0 +1,18 @@
+import {ADDITION, MULTIPLICATION, SUBTRACTION} from './actionType';
+
+const initialState = {
+  counter: 0,
+};
+
+export const mainReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADDITION:
+      return {...state, counter: state.counter + 1};
+    case SUBTRACTION:
+      return {...state, counter: state.counter - 1};
+    case MULTIPLICATION:
+      return {...state, counter: state.counter * 2};
+    default:
+      return state;
+  }
+};
