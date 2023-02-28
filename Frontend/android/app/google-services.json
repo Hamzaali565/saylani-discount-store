@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "359796827523",
+    "project_id": "native-using-sbucket",
+    "storage_bucket": "native-using-sbucket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359796827523:android:a1713cf88e22c1771d02b6",
+        "android_client_info": {
+          "package_name": "com.saylanidiscountstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359796827523-d1ce8mbu1teb476o44uugmrphcf3c6ip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAebYFh9HcreOAII0UPaXW_tWjVT9TAt4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359796827523-d1ce8mbu1teb476o44uugmrphcf3c6ip.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
