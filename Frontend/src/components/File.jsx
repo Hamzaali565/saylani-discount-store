@@ -38,7 +38,7 @@ const File = () => {
     <View style={{backgroundColor: 'black', flex: 1}}>
       <Text style={{color: 'white'}}>{image}</Text>
       <Button title="Choose File" onPress={pickImageAndUpload} />
-      <Image style={{height: 100, width: 100}} source={preview} />
+      <Image style={{height: 100, width: 100}} source={{uri: `${image}`}} />
     </View>
   );
 };
