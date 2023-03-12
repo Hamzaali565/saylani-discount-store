@@ -9,4 +9,6 @@ export default {
   dark: '#0c0c0c',
   green: '#61B846',
   blue: '#024F9D',
+  grey2: '#BFBCBC',
+  BackGrey: '#D9D9D9',
 };

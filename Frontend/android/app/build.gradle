@@ -52,6 +52,7 @@ react {
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
     // hermesFlags = ["-O", "-output-source-map"]
 }
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create four separate APKs instead of one,
@@ -78,7 +79,6 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
-
 /**
  * Private function to get the list of Native Architectures you want to build.
  * This reads the value from reactNativeArchitectures in your gradle.properties
@@ -154,7 +154,8 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation platform('com.google.firebase:firebase-bom:31.2.2')
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
-
+    implementation project(':react-native-vector-icons')
+    
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'

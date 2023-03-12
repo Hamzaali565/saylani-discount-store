@@ -1,68 +1,87 @@
 import React from 'react';
-import {Text, View, Image, StyleSheet} from 'react-native';
-import Counter from '../../components/Counter';
-import SvgUri from 'react-native-svg-uri';
-import FRAMESVG from '../../assets/images/Frame.svg';
-import AppText from '../../components/AppText';
-import color from '../../config/color';
+import {View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import AppButton1 from '../../components/AppButton1';
-const Login = () => {
-  const call = text => {
-    console.log('====================================');
-    console.log(text);
-    console.log('====================================');
+import AppText from '../../components/AppText';
+import IconInput from '../../components/IconInput';
+import color from '../../config/color';
+const Login = ({navigation}) => {
+  const Move = () => {
+    navigation.navigate('SignUp');
   };
   return (
-    <View style={style.container}>
-      <View style={style.image}>
-        <Image source={require('../../assets/images/Frame.jpg')} />
+    <ScrollView style={styles.container}>
+      <View style={styles.textContainer}>
+        <AppText style={styles.text1}>SAYLANI WELFARE</AppText>
+        <AppText style={styles.text2}>ONLINE DISCOUNT STORE</AppText>
       </View>
-      <View style={style.TextContainer}>
-        <AppText
-          onPress={text => {
-            call(text);
-          }}
-          style={style.AppText}>
-          SAYLANI WELFARE
-        </AppText>
-        <AppText style={style.AppText2}>ONLINE DISCOUNT STORE</AppText>
+      <View style={styles.fieldContainer}>
+        <IconInput
+          placeholder="Email"
+          iconName="user-circle"
+          iconStyle={{color: color.grey}}
+          keyboardType="email-address"
+          // styleContainer={{marginTop: 50}}
+        />
+        <IconInput
+          placeholder="Password"
+          iconName="eye-slash"
+          iconStyle={{color: color.grey}}
+          // keyboardType="email-address"
+          secure={true}
+        />
+        <TouchableOpacity style={styles.forget}>
+          <AppText style={styles.text3}>Forget Password?</AppText>
+        </TouchableOpacity>
+        <View style={styles.button}>
+          <AppButton1 title="Sign In" onPress={Move} />
+        </View>
+        <TouchableOpacity style={styles.register}>
+          <AppText style={styles.text4}>Don't have an account?Register</AppText>
+        </TouchableOpacity>
       </View>
-      <View style={style.button}>
-        <AppButton1 title="Get Started" />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
-
-const style = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
-  image: {
+const styles = StyleSheet.create({
+  textContainer: {
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: '25%',
   },
-  AppText: {
+  text1: {
+    fontSize: 35,
     color: color.green,
     fontWeight: '700',
-    fontSize: 38,
   },
-  AppText2: {
-    color: color.blue,
+  text2: {
     fontSize: 20,
-    fontWeight: '400',
-    lineHeight: 25,
+    color: color.blue,
+    fontWeight: '600',
   },
-  TextContainer: {
-    alignItems: 'center',
-    marginTop: '10%',
+  text3: {
+    color: color.blue,
+    fontWeight: '700',
+    fontSize: 15,
   },
-  button: {
-    justifyContent: 'flex-end',
-    // height: '100%',
-    top: '30%',
+  text4: {
+    color: color.blue,
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  forget: {
+    marginTop: 20,
+    color: color.blue,
+  },
+  fieldContainer: {
+    marginTop: '20%',
     paddingHorizontal: '10%',
   },
+  button: {
+    // paddingHorizontal: '10%',
+    marginTop: '20%',
+  },
+  register: {
+    marginTop: '5%',
+    // fontSize: 15,
+  },
 });
-
 export default Login;
