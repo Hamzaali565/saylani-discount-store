@@ -1,45 +1,36 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import {Provider} from 'react-redux';
-// import Counter from './src/components/Counter';
-// import File from './src/components/File';
-import File from './src/components/File';
-import GetStarted from './src/screens/Auth/GetStarted';
-import Login from './src/screens/Auth/Login';
-import SignUP from './src/screens/Auth/Singup';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {store} from './src/store/store';
 import {NavigationContainer} from '@react-navigation/native';
 import Auth from './src/Routes/Auth';
+import BottomBar from './src/BottomNavigator/BottomBar';
+import NavTheme from './src/BottomNavigator/NavTheme';
+import {createStore} from 'redux';
+import mainReducer from './src/store/reducer';
+import Render from './src/components/Render';
 import Admin from './src/Routes/Admin';
-import Header from './src/components/Header';
-import AllProductsComponent from './src/components/AllProductsComponent';
-import CameraField from './src/components/CameraField';
-import SimpleInput from './src/components/SimpleInput';
-import CategoryInput from './src/components/CategoryInput';
+// const store = createStore(mainReducer);
 const App = () => {
+  const admin = useSelector(state => state.boolean);
+  console.log('====================================');
+  console.log(admin);
+  console.log('====================================');
+  // const disp = useDispatch();
+
   return (
-    <NavigationContainer theme={{colors: 'white'}}>
+    // <Provider store={store}>
+    <NavigationContainer theme={NavTheme}>
       <View
         style={{
-          backgroundColor: 'white',
-          // alignItems: 'center',
           flex: 1,
         }}>
-        <Provider store={store}>
-          {/* <AllProductsComponent /> */}
-          {/* <Auth /> */}
-          <Admin />
-          {/* <CategoryInput /> */}
-          {/* <SimpleInput /> */}
-          {/* <CameraField /> */}
-          {/* <Header /> */}
-          {/* <File /> */}
-          {/* <GetStarted /> */}
-          {/* <Login /> */}
-          {/* <SignUP /> */}
-        </Provider>
+        {admin == true ? <BottomBar /> : <Auth />}
+        {/* <Auth /> */}
+        {/* <BottomBar /> */}
       </View>
     </NavigationContainer>
+    // </Provider>
   );
 };
 

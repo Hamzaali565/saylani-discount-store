@@ -6,7 +6,7 @@ import Header from '../../components/Header';
 import color from '../../config/color';
 const AllProducts = ({navigation}) => {
   const MOve = () => {
-    navigation.navigate('addNew');
+    navigation.navigate('settings');
   };
   return (
     <ScrollView style={styles.container}>

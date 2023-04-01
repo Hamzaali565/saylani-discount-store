@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, View} from 'react-native';
+import {TextInput, View, TouchableWithoutFeedback} from 'react-native';
 import FontAwesome, {BrandIcons, SolidIcons} from 'react-native-fontawesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Text} from 'react-native/Libraries/Text/Text';
@@ -13,6 +13,7 @@ const IconInput = ({
   iconName,
   secure,
   styleContainer,
+  onpress,
 }) => {
   return (
     <View style={styleContainer}>
@@ -24,7 +25,7 @@ const IconInput = ({
         }}>
         <TextInput
           placeholder={placeholder}
-          //   secureTextEntry={true}
+          secureTextEntry={secure}
           keyboardType={keyboardType}
           //   keyboardType="decimal-pad"
           onChangeText={onChangeText}
@@ -36,12 +37,12 @@ const IconInput = ({
           }}
         />
         {/* <Text> */}
-        <View>
+        <TouchableWithoutFeedback onPress={onpress}>
           <FontAwesome5
             style={[{color: 'black', fontSize: 20}, iconStyle]}
             name={iconName}
           />
-        </View>
+        </TouchableWithoutFeedback>
         {/* </Text> */}
         {/* <FontAwesome icon={faMugSaucer} /> */}
       </View>

@@ -2,12 +2,13 @@ import React from 'react';
 import {View, Image, StyleSheet} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import color from '../config/color';
+import AppButton1 from './AppButton1';
 import AppText from './AppText';
 const AllProductsComponent = ({
   productImage,
-  productName = 'Apple',
-  productWeight = '1. Kg',
-  productPrice = 'Pkr 300',
+  productName,
+  productWeight,
+  productPrice,
 }) => {
   return (
     <View style={styles.container}>
@@ -15,20 +16,28 @@ const AllProductsComponent = ({
       <View style={styles.container2}>
         {/* image */}
         <View>
-          <Image source={require('../assets/images/Apple.jpg')} />
+          <Image
+            source={require('../assets/images/Apple.jpg')}
+            style={{height: 90, width: 120, resizeMode: 'contain'}}
+          />
         </View>
         {/* Name/kg */}
         <View style={styles.textContainer}>
           <AppText style={styles.AppText1}>{productName}</AppText>
-          <AppText style={styles.AppText2}>{productWeight}</AppText>
+          {productWeight && (
+            <AppText style={styles.AppText2}>{productWeight}</AppText>
+          )}
         </View>
       </View>
       {/* =============== */}
       {/* price */}
       <View>
-        <AppText style={styles.AppText3}>{productPrice}</AppText>
+        {productPrice && (
+          <AppText style={styles.AppText3}>{productPrice}</AppText>
+        )}
       </View>
     </View>
+    // </View>
   );
 };
 const styles = StyleSheet.create({

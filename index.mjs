@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "*"],
+    origin: ["http://192.168.3.105:8081"],
     credentials: true,
   })
 );
@@ -136,7 +136,7 @@ app.post("/api/v1/login", (req, res) => {
   // check if user exist
   userModel.findOne(
     { email: body.email },
-    "fullName email password contact",
+    "fullName email password contact admin",
     (err, data) => {
       if (!err) {
         console.log("data: ", data);
@@ -173,6 +173,7 @@ app.post("/api/v1/login", (req, res) => {
                   email: data.email,
                   contact: data.contact,
                   _id: data._id,
+                  admin: data.admin,
                 },
               });
               return;
@@ -248,6 +249,7 @@ app.post("/api/v1/product", (req, res) => {
           // data: data,
         });
       } else {
+        console.log(err);
         res.status(500).send({
           message: "Product not Added. Please try later.",
         });
@@ -264,7 +266,7 @@ app.post("/api/v1/category", (req, res) => {
   if (
     // validation
     !body.image &&
-    !body.category
+    !body.categoryName
   ) {
     res.status(400).send({
       message: "required parameters missing",
@@ -274,7 +276,7 @@ app.post("/api/v1/category", (req, res) => {
   categoryModel.create(
     {
       image: body.image,
-      categoryName: body.category,
+      categoryName: body.categoryName,
       // owner: new mongoose.Types.ObjectId(body.token._id),
     },
     (err, saved) => {
@@ -286,6 +288,7 @@ app.post("/api/v1/category", (req, res) => {
           // data: data,
         });
       } else {
+        console.log("err", err);
         res.status(500).send({
           message: "Product not Added. Please try later.",
         });
@@ -373,7 +376,7 @@ app.get("/api/v1/orders", (req, res) => {
   });
 });
 //---------------------------------------//
-///------------Uodate UserName 9----------//
+///------------Update UserName 9----------//
 app.put("/api/v1/product/:id", async (req, res) => {
   const body = req.body;
   const id = req.params.id;
@@ -389,13 +392,21 @@ app.put("/api/v1/product/:id", async (req, res) => {
         {
           fullName: body.fullName,
         },
+        // "fullName email contact admin",
         { new: true }
       )
       .exec();
-    console.log("updated: ", data);
+    let joke = {
+      fullName: data.fullName,
+      contact: data.contact,
+      email: data.email,
+      _id: data._id,
+      admin: data.admin,
+    };
+    console.log("updated: ", joke);
     res.send({
       message: "Name Updated Successfully",
-      data: data,
+      data: joke,
     });
   } catch (error) {
     console.log("error: ", error);

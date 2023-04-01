@@ -1,15 +1,22 @@
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Text, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useSelector} from 'react-redux';
 import color from '../config/color';
 import AppText from './AppText';
 
-const Header = ({iconStyle, BackButton, onPress, onpressOrder}) => {
+const Header = ({iconStyle, BackButton, onPress, onpressOrder, navigation}) => {
+  const myobj = useSelector(state => state.object);
+  const navigate = useNavigation();
+  const Move = () => {
+    navigate.navigate('settings');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.threeData}>
         {/* Button */}
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={Move}>
           {BackButton && (
             <FontAwesome5
               style={[{color: color.grey, fontSize: 35}, iconStyle]}
@@ -23,12 +30,12 @@ const Header = ({iconStyle, BackButton, onPress, onpressOrder}) => {
         </View>
         {/* Name & Position */}
         <View>
-          <AppText style={styles.text1}>Muhammad Hamza</AppText>
-          <AppText style={styles.text2}>Admin</AppText>
+          <AppText style={styles.text1}>{myobj?.fullName}</AppText>
+          {myobj?.admin ? <AppText style={styles.text2}>Admin</AppText> : null}
         </View>
       </View>
       {/*  */}
-      <TouchableOpacity onPress={onpressOrder}>
+      <TouchableOpacity onPress={Move}>
         <FontAwesome5
           style={[{color: color.grey, fontSize: 30}, iconStyle]}
           name="book"

@@ -9,11 +9,15 @@ import {
 import color from '../config/color';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const CategoryInput = ({title, fontStyle, style, onClick, textStyle}) => {
+const CategoryInput = ({title, fontStyle, style, onPress, textStyle}) => {
   return (
-    <TouchableOpacity style={[styles.container, style]} onClick={onClick}>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <View style={styles.category}>
-        <Text style={[{color: color.grey2}, textStyle]}>
+        <Text
+          style={[
+            !title ? {color: color.grey2} : {color: color.black},
+            textStyle,
+          ]}>
           {!title ? 'Category' : title}
         </Text>
         <FontAwesome5
@@ -35,6 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
+    alignItems: 'center',
   },
 });
 export default CategoryInput;

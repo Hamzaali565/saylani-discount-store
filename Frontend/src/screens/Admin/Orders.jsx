@@ -1,5 +1,13 @@
-import React from 'react';
-import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import Header from '../../components/Header';
 import color from '../../config/color';
 import {useNavigation} from '@react-navigation/native';
@@ -9,20 +17,114 @@ import CameraField from '../../components/CameraField';
 import SimpleInput from '../../components/SimpleInput';
 import AppButton1 from '../../components/AppButton1';
 import AllProductsComponent from '../../components/AllProductsComponent';
-
+import {useDispatch, useSelector} from 'react-redux';
+import axios from 'axios';
+import {setObject} from '../../store/action';
+import {launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 const Orders = ({navigation}) => {
+  const [fullName, setFullName] = useState('');
+  const [image, setImage] = useState('');
+  const [systemUri, setSystemUri] = useState(null);
+  const [check, setCheck] = useState(false);
+
   const Navi = useNavigation();
+  const myobj = useSelector(state => state.object._id);
+  // const myobj = '63f5c5766ba8f65c2790d92f';
+  const url = useSelector(state => state.url);
+  const Dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('====================================');
+    console.log(myobj);
+    console.log('====================================');
+  }, []);
+
   const DATEIS = () => {
-    Navi.goBack();
+    Navi.pop();
   };
   const Move = () => {
     navigation.navigate('settings');
   };
+  const updateName = async () => {
+    try {
+      let response = await axios.put(
+        `${url}/product/${myobj}`,
+        {fullName},
+        {withCredentials: true},
+      );
+      console.log('response', response.data.data);
+      Dispatch(setObject(response.data.data));
+      setFullName('');
+    } catch (error) {
+      console.log('====================================');
+      console.log(error);
+      console.log('====================================');
+    }
+  };
+  const Upload = async () => {
+    const launch = await launchImageLibrary({quality: 0.5}, fileobj => {
+      setSystemUri(fileobj.assets[0].uri);
+      const uploadTask = storage()
+        .ref()
+        .child(`/userprofile/${Date.now()}`)
+        .putFile(fileobj.assets[0].uri);
+
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (progress == 100);
+        },
+        error => {
+          alert('error uploading image');
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+            setImage(downloadURL);
+            console.log('url', downloadURL);
+          });
+        },
+      );
+    });
+  };
+  const AddCategory = async () => {
+    try {
+      let response = await axios.post(
+        `${url}/category`,
+        {
+          image: image,
+          categoryName: fullName,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      console.log('response', response);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  const Logout = async () => {
+    try {
+      let response = await axios.post(
+        `${url}/logout`,
+        {},
+        {withCredentials: true},
+      );
+      console.log('response', response);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
   return (
     // <View>
     //   <Header BackButton={'step-backward'} onPress={DATEIS} />
-    <View>
-      <AppText style={styles.heading}>Settings</AppText>
+    <View style={styles.container}>
+      <AppText style={styles.heading} onPress={Move}>
+        Settings
+      </AppText>
       <View style={styles.imageContaier}>
         <Image
           style={styles.image}
@@ -35,36 +137,75 @@ const Orders = ({navigation}) => {
           style={styles.input}
           placeholder="Update Full Name"
           placeholderTextColor={color.grey2}
+          onChangeText={text => {
+            setFullName(text);
+          }}
         />
-        <FontAwesome5
-          style={[{color: color.grey2, fontSize: 30}]}
-          name="edit"
-        />
+        <TouchableOpacity onPress={updateName}>
+          <FontAwesome5
+            style={[{color: color.grey2, fontSize: 30}]}
+            name="edit"
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.serpetor} />
 
       {/* categoty Edit */}
       <View style={styles.cameraField}>
-        <CameraField style={styles.categoryImage} fontStyle={{fontSize: 40}} />
+        {systemUri == null ? (
+          <CameraField
+            style={styles.categoryImage}
+            fontStyle={{fontSize: 40}}
+            onPress={Upload}
+          />
+        ) : (
+          <TouchableOpacity
+            onPress={Upload}
+            style={{height: 100, borderRadius: 10}}>
+            <Image
+              source={{uri: systemUri}}
+              style={{
+                resizeMode: 'cover',
+                height: '100%',
+                width: '100%',
+                borderRadius: 10,
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.categoryInputButton}>
-        <SimpleInput style={styles.categoryInput} />
+        <SimpleInput
+          style={styles.categoryInput}
+          onChangeText={text => {
+            setFullName(text);
+          }}
+        />
         <AppButton1
           style={styles.categoryButton}
           title="ADD"
           textStyle={styles.categoryButtonText}
+          onPress={AddCategory}
         />
       </View>
 
       {/* show Category */}
 
       <AppText style={styles.allCategoriesText}>All Categories</AppText>
-      <AllProductsComponent />
+      <View>
+        <AllProductsComponent productName="Apple" />
+      </View>
+      <View>
+        <AppButton1 title="Logout" onPress={Logout} />
+      </View>
     </View>
     // </View>
   );
 };
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: '7%',
+  },
   heading: {
     fontSize: 25,
     color: color.blue,

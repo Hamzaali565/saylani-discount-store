@@ -1,12 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import AppButton1 from '../../components/AppButton1';
 import AppText from '../../components/AppText';
 import IconInput from '../../components/IconInput';
 import color from '../../config/color';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import {setAdmin, setObject} from '../../store/action';
 const Login = ({navigation}) => {
-  const Move = () => {
-    navigation.navigate('SignUp');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordState, setPasswordState] = useState(false);
+  const Dispatch = useDispatch();
+  const myobj = useSelector(state => state.object);
+  const admin = useSelector(state => state.boolean);
+  const url = useSelector(state => state.url);
+  useEffect(() => {
+    console.log('data', url);
+  }, []);
+
+  const Move = async () => {
+    console.log('====================================');
+    console.log('my', myobj);
+    console.log('Admin', admin);
+    console.log('====================================');
+    try {
+      let response = await axios.post(
+        `${url}/login`,
+        {
+          email: email,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(response.data.profile);
+      Dispatch(setObject(response.data.profile));
+      Dispatch(setAdmin(response.data.profile.admin));
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <ScrollView style={styles.container}>
@@ -20,14 +54,23 @@ const Login = ({navigation}) => {
           iconName="user-circle"
           iconStyle={{color: color.grey}}
           keyboardType="email-address"
+          onChangeText={text => {
+            setEmail(text);
+          }}
           // styleContainer={{marginTop: 50}}
         />
         <IconInput
           placeholder="Password"
-          iconName="eye-slash"
+          iconName={!passwordState ? 'eye' : 'eye-slash'}
           iconStyle={{color: color.grey}}
           // keyboardType="email-address"
-          secure={true}
+          secure={!passwordState ? true : false}
+          onChangeText={text => {
+            setPassword(text);
+          }}
+          onpress={() => {
+            setPasswordState(!passwordState);
+          }}
         />
         <TouchableOpacity style={styles.forget}>
           <AppText style={styles.text3}>Forget Password?</AppText>
