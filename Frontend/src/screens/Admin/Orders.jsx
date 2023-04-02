@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   Image,
+  ScrollView,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
@@ -19,15 +20,17 @@ import AppButton1 from '../../components/AppButton1';
 import AllProductsComponent from '../../components/AllProductsComponent';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
-import {setObject} from '../../store/action';
+import {setLogin, setObject} from '../../store/action';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 const Orders = ({navigation}) => {
   const [fullName, setFullName] = useState('');
   const [image, setImage] = useState('');
+
   const [systemUri, setSystemUri] = useState(null);
   const [check, setCheck] = useState(false);
 
+  const [allCategories, setAllCategories] = useState([]);
   const Navi = useNavigation();
   const myobj = useSelector(state => state.object._id);
   // const myobj = '63f5c5766ba8f65c2790d92f';
@@ -38,6 +41,7 @@ const Orders = ({navigation}) => {
     console.log('====================================');
     console.log(myobj);
     console.log('====================================');
+    Categories();
   }, []);
 
   const DATEIS = () => {
@@ -46,10 +50,21 @@ const Orders = ({navigation}) => {
   const Move = () => {
     navigation.navigate('settings');
   };
+  const Categories = async () => {
+    try {
+      let response = await axios.get(`${url}/categories`, {
+        withCredentials: true,
+      });
+      console.log('response', response.data.data);
+      setAllCategories(response.data.data.reverse());
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
   const updateName = async () => {
     try {
       let response = await axios.put(
-        `${url}/product/${myobj}`,
+        `${url}/api/v1/product/${myobj}`,
         {fullName},
         {withCredentials: true},
       );
@@ -92,7 +107,7 @@ const Orders = ({navigation}) => {
   const AddCategory = async () => {
     try {
       let response = await axios.post(
-        `${url}/category`,
+        `${url}/api/v1/category`,
         {
           image: image,
           categoryName: fullName,
@@ -109,11 +124,12 @@ const Orders = ({navigation}) => {
   const Logout = async () => {
     try {
       let response = await axios.post(
-        `${url}/logout`,
+        `${url}/api/v1/logout`,
         {},
         {withCredentials: true},
       );
       console.log('response', response);
+      Dispatch(setLogin(false));
     } catch (error) {
       console.log('error', error);
     }
@@ -121,7 +137,7 @@ const Orders = ({navigation}) => {
   return (
     // <View>
     //   <Header BackButton={'step-backward'} onPress={DATEIS} />
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <AppText style={styles.heading} onPress={Move}>
         Settings
       </AppText>
@@ -192,19 +208,29 @@ const Orders = ({navigation}) => {
       {/* show Category */}
 
       <AppText style={styles.allCategoriesText}>All Categories</AppText>
-      <View>
-        <AllProductsComponent productName="Apple" />
-      </View>
+      <ScrollView style={{height: 180}} scrollEnabled={true}>
+        <FlatList
+          data={allCategories}
+          keyExtractor={item => item._id}
+          renderItem={({item}) => (
+            <AllProductsComponent
+              productName={item?.categoryName}
+              productImage={item?.image}
+            />
+          )}
+        />
+      </ScrollView>
       <View>
         <AppButton1 title="Logout" onPress={Logout} />
       </View>
-    </View>
+    </ScrollView>
     // </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: '7%',
+    flex: 1,
   },
   heading: {
     fontSize: 25,

@@ -5,13 +5,15 @@ import {
   SET_OBJECT,
   SET_ADMIN,
   BASE_URL,
+  SET_LOGIN,
 } from './actionType';
 
 const initialState = {
   counter: 0,
   object: null,
   boolean: null,
-  url: 'http://192.168.3.105:3001/api/v1',
+  login: null,
+  url: 'http://192.168.3.105:3001',
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -31,6 +33,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         boolean: action.payload,
+      };
+    case SET_LOGIN:
+      return {
+        ...state,
+        login: action.payload,
       };
     case BASE_URL:
       return {

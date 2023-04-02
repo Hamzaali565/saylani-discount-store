@@ -6,7 +6,7 @@ import IconInput from '../../components/IconInput';
 import color from '../../config/color';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {setAdmin, setObject} from '../../store/action';
+import {setAdmin, setLogin, setObject} from '../../store/action';
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,8 +15,10 @@ const Login = ({navigation}) => {
   const myobj = useSelector(state => state.object);
   const admin = useSelector(state => state.boolean);
   const url = useSelector(state => state.url);
+  const login = useSelector(state => state.login);
   useEffect(() => {
     console.log('data', url);
+    console.log('LOGIN', login);
   }, []);
 
   const Move = async () => {
@@ -26,7 +28,7 @@ const Login = ({navigation}) => {
     console.log('====================================');
     try {
       let response = await axios.post(
-        `${url}/login`,
+        `${url}/api/v1/login`,
         {
           email: email,
           password: password,
@@ -38,6 +40,7 @@ const Login = ({navigation}) => {
       console.log(response.data.profile);
       Dispatch(setObject(response.data.profile));
       Dispatch(setAdmin(response.data.profile.admin));
+      Dispatch(setLogin(true));
     } catch (err) {
       console.log(err);
     }

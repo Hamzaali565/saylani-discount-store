@@ -5,6 +5,7 @@ import {
   SET_OBJECT,
   SET_ADMIN,
   BASE_URL,
+  SET_LOGIN,
 } from './actionType';
 
 export const addition = () => ({
@@ -23,6 +24,10 @@ export const setObject = object => ({
 export const setAdmin = boolean => ({
   type: SET_ADMIN,
   payload: boolean,
+});
+export const setLogin = login => ({
+  type: SET_LOGIN,
+  payload: login,
 });
 export const baseurl = () => ({
   type: BASE_URL,

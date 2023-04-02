@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -40,6 +40,20 @@ const AddNewItem = ({navigation}) => {
   const DATEIS = () => {
     Navi.pop();
   };
+  // Action On Page Load
+  useEffect(() => {
+    Empty();
+  }, []);
+
+  // empty Fields
+  const Empty = () => {
+    setImage('');
+    setItemName('');
+    setcategotyText('');
+    setDescription('');
+    setUnitNme('');
+    setUnitPrice('');
+  };
   // image Upload to Firebase storage bucket
   const Upload = () => {
     const launch = launchImageLibrary({quality: 0.5}, fileobj => {
@@ -66,13 +80,14 @@ const AddNewItem = ({navigation}) => {
           });
         },
       );
+      // }
     });
   };
   // Add product API call
   const AddProduct = async () => {
     try {
       let response = await axios.post(
-        `${url}/product`,
+        `${url}/api/v1/product`,
         {
           image: image,
           category: categoryText,
@@ -90,6 +105,7 @@ const AddNewItem = ({navigation}) => {
       console.log('errror', err);
     }
   };
+
   return (
     <View style={styles.container}>
       <Header BackButton={'chevron-left'} onPress={DATEIS} />

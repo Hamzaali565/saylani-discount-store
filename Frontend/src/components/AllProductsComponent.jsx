@@ -17,7 +17,8 @@ const AllProductsComponent = ({
         {/* image */}
         <View>
           <Image
-            source={require('../assets/images/Apple.jpg')}
+            // source={ur({productImage})}
+            source={{uri: productImage}}
             style={{height: 90, width: 120, resizeMode: 'contain'}}
           />
         </View>
@@ -25,7 +26,7 @@ const AllProductsComponent = ({
         <View style={styles.textContainer}>
           <AppText style={styles.AppText1}>{productName}</AppText>
           {productWeight && (
-            <AppText style={styles.AppText2}>{productWeight}</AppText>
+            <AppText style={styles.AppText2}>1. {productWeight}</AppText>
           )}
         </View>
       </View>
@@ -33,7 +34,7 @@ const AllProductsComponent = ({
       {/* price */}
       <View>
         {productPrice && (
-          <AppText style={styles.AppText3}>{productPrice}</AppText>
+          <AppText style={styles.AppText3}>Pkr {productPrice}</AppText>
         )}
       </View>
     </View>

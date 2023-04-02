@@ -9,14 +9,14 @@ import mongoose from "mongoose";
 mongoose.set("strictQuery", false);
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://192.168.3.105:8081"],
+    origin: ["http://192.168.3.105:8081", "*"],
     credentials: true,
   })
 );
@@ -210,7 +210,43 @@ app.post("/api/v1/logout", (req, res) => {
 
   res.send({ message: "Logout successful" });
 });
+//-----------------LOGIN CHECK --------------//
+// app.use("/api/v1", (req, res, next) => {
+//   console.log("req.cookies:", req.cookies);
 
+//   if (!req?.cookies?.Token) {
+//     res.status(401).send({
+//       message: "include http-only credentials with every request",
+//     });
+//     return;
+//   }
+
+//   jwt.verify(req.cookies.Token, SECRET, function (err, decodedData) {
+//     if (!err) {
+//       console.log("decodedData: ", decodedData);
+
+//       const nowDate = new Date().getTime() / 1000;
+
+//       if (decodedData.exp < nowDate) {
+//         res.status(401);
+//         res.cookie("Token", "", {
+//           maxAge: 1,
+//           httpOnly: true,
+//           sameSite: "none",
+//           secure: true,
+//         });
+//         res.send({ message: "token expired" });
+//       } else {
+//         console.log("token approved");
+
+//         req.body.token = decodedData;
+//         next();
+//       }
+//     } else {
+//       res.status(401).send("invalid token");
+//     }
+//   });
+// });
 //-----------------------------------------//
 //----- ADD PRODUCT API (ADMIN) 4------///
 app.post("/api/v1/product", (req, res) => {
@@ -297,7 +333,20 @@ app.post("/api/v1/category", (req, res) => {
   );
 });
 //-----------//
-
+app.get("/api/v1/categories", (req, res) => {
+  categoryModel.find({}, (err, data) => {
+    if (!err) {
+      res.status(200).send({
+        message: "Here We GO!",
+        data: data,
+      });
+    } else {
+      res.status(500).send({
+        message: "server error",
+      });
+    }
+  });
+});
 //----- costumerOrderApi API (user) 6------///
 app.post("/api/v1/order", (req, res) => {
   const body = req.body;
