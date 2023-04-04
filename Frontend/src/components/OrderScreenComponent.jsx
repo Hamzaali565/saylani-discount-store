@@ -30,9 +30,11 @@ const OrderScreenComponent = ({
         <AppText style={styles.Price}>Pkr {price}</AppText>
       </View>
       {/* Update status */}
-      <View style={styles.updateStatus}>
-        <CategoryInput onPress={onPress} title={title} />
-      </View>
+      {title && (
+        <View style={styles.updateStatus}>
+          <CategoryInput onPress={onPress} title={title} />
+        </View>
+      )}
     </View>
   );
 };

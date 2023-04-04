@@ -13,6 +13,7 @@ const IconInput = ({
   iconName,
   secure,
   styleContainer,
+  maxLength,
   onpress,
 }) => {
   return (
@@ -29,6 +30,7 @@ const IconInput = ({
           keyboardType={keyboardType}
           //   keyboardType="decimal-pad"
           onChangeText={onChangeText}
+          maxLength={maxLength}
           placeholderTextColor={color.grey}
           style={{
             color: 'black',

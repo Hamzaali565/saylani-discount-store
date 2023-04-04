@@ -10,6 +10,7 @@ import Settings from '../screens/Admin/Settings';
 import Orders from '../screens/Admin/Orders';
 import Header from '../components/Header';
 import BottomBar from '../BottomNavigator/BottomBar';
+import HomePage from '../screens/Client/HomePage';
 const Admin = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -27,7 +28,8 @@ const Admin = () => {
       {/* <Stack.Screen name="addNew" component={AddNewItem} /> */}
       {/* <Stack.Screen name="orderDetails" component={Orders} /> */}
       <Stack.Screen name="settings" component={Settings} />
-      {/* <Stack.Screen name="Tab" component={BottomBar} /> */}
+
+      {/* <Stack.Screen name="Tab" component={HomePage} /> */}
     </Stack.Navigator>
   );
 };

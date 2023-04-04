@@ -6,6 +6,7 @@ import {
   SET_ADMIN,
   BASE_URL,
   SET_LOGIN,
+  SET_CART,
 } from './actionType';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   boolean: null,
   login: null,
   url: 'http://192.168.3.105:3001',
+  cart: null,
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -43,6 +45,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         url: state.url,
+      };
+    case SET_CART:
+      return {
+        ...state,
+        cart: action.payload,
       };
     default:
       return state;

@@ -11,6 +11,12 @@ import mainReducer from './src/store/reducer';
 import Render from './src/components/Render';
 import Admin from './src/Routes/Admin';
 import {setLogin} from './src/store/action';
+import HomePage from './src/screens/Client/HomePage';
+import AllProducts from './src/screens/Admin/AllProducts';
+import HeaderType from './src/components/HeaderType';
+import Cart from './src/screens/Client/Cart';
+import MyOrder from './src/screens/Client/MyOrder';
+import UserBar from './src/BottomNavigator/UserBar';
 // const store = createStore(mainReducer);
 const App = () => {
   const admin = useSelector(state => state.boolean);
@@ -33,8 +39,13 @@ const App = () => {
           flex: 1,
         }}>
         {/* {admin == true ? <BottomBar /> : <Auth />} */}
-        {login === true && admin === true ? <BottomBar /> : null}
-        {login === false ? <Auth /> : null}
+        {/* {login === true && admin === true ? <BottomBar /> : null} */}
+        {/* {login === false ? <Auth /> : null} */}
+        {/* <HomePage /> */}
+        {/* <Cart /> */}
+        {/* <MyOrder /> */}
+        <UserBar />
+        {/* <HeaderType /> */}
       </View>
     </NavigationContainer>
     // </Provider>

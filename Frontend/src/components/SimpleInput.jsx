@@ -8,6 +8,8 @@ const SimpleInput = ({
   style,
   inputStyle,
   keyboardType,
+  maxLength,
+  value,
 }) => {
   return (
     <View style={[styles.container, style]}>
@@ -16,6 +18,8 @@ const SimpleInput = ({
         onChangeText={onChangeText}
         // numberOfLines={4}
         // textBreakStrategy={'balanced'}
+        maxLength={maxLength}
+        value={value}
         keyboardType={keyboardType}
         placeholderTextColor={color.grey2}
         style={[styles.input, inputStyle]}
