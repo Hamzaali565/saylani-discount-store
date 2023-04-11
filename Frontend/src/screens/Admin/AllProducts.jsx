@@ -20,6 +20,8 @@ const AllProducts = ({navigation}) => {
   const [indicator, setIndicator] = useState(true);
 
   const url = useSelector(state => state.url);
+  const token = useSelector(state => state.token);
+  console.log('token', token);
   useEffect(() => {
     AllProducts();
   }, []);
@@ -30,7 +32,9 @@ const AllProducts = ({navigation}) => {
   const AllProducts = async () => {
     try {
       let response = await axios.get(`${url}/api/v1/products`, {
-        withCredentials: true,
+        headers: {
+          Cookie: `Token=${token}`,
+        },
       });
       console.log('response', response.data.data);
       setProduct(response.data.data);

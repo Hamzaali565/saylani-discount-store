@@ -6,7 +6,7 @@ import IconInput from '../../components/IconInput';
 import color from '../../config/color';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {setAdmin, setLogin, setObject} from '../../store/action';
+import {setToken, setAdmin, setLogin, setObject} from '../../store/action';
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,6 +41,8 @@ const Login = ({navigation}) => {
       Dispatch(setObject(response.data.profile));
       Dispatch(setAdmin(response.data.profile.admin));
       Dispatch(setLogin(true));
+      Dispatch(setToken(response.data.profile.token));
+      console.log('response.data.profile.token', response.data.profile.token);
     } catch (err) {
       console.log(err);
     }

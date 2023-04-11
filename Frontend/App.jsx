@@ -39,12 +39,12 @@ const App = () => {
           flex: 1,
         }}>
         {/* {admin == true ? <BottomBar /> : <Auth />} */}
-        {/* {login === true && admin === true ? <BottomBar /> : null} */}
-        {/* {login === false ? <Auth /> : null} */}
+        {login === true && admin === true ? <BottomBar /> : null}
+        {login === false ? <Auth /> : null}
         {/* <HomePage /> */}
         {/* <Cart /> */}
         {/* <MyOrder /> */}
-        <UserBar />
+        {/* <UserBar /> */}
         {/* <HeaderType /> */}
       </View>
     </NavigationContainer>

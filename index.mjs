@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://192.168.3.105:8081", "*"],
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -62,6 +62,13 @@ const costumerOrderSchema = new mongoose.Schema({
   address: { type: String, required: true },
 });
 const costumerOrderModel = mongoose.model("OrderSchema", costumerOrderSchema);
+//  --- MY CART --- //
+const MyCart = new mongoose.Schema({
+  data: { type: Object, required: true },
+  owner: { type: mongoose.ObjectId, required: true },
+  isDeleted: { type: Boolean, default: false },
+});
+const MyCartModel = mongoose.model("CartSchema", MyCart);
 // --------user SignUP 1--------//
 app.post("/api/v1/signup", (req, res) => {
   let body = req.body;
@@ -123,6 +130,7 @@ app.post("/api/v1/signup", (req, res) => {
 //----------user Login 2----------//
 app.post("/api/v1/login", (req, res) => {
   let body = req.body;
+  body.email = body.email.toLowerCase();
 
   if (!body.email || !body.password) {
     // null check - undefined, "", 0 , false, null , NaN
@@ -132,7 +140,6 @@ app.post("/api/v1/login", (req, res) => {
     return;
   }
 
-  body.email = body.email.toLowerCase();
   // check if user exist
   userModel.findOne(
     { email: body.email },
@@ -165,7 +172,7 @@ app.post("/api/v1/login", (req, res) => {
                 sameSite: "none",
                 secure: true,
               });
-
+              console.log("res.cookiesa", req.cookies);
               res.send({
                 message: "login successful",
                 profile: {
@@ -174,6 +181,7 @@ app.post("/api/v1/login", (req, res) => {
                   contact: data.contact,
                   _id: data._id,
                   admin: data.admin,
+                  token: token,
                 },
               });
               return;
@@ -211,42 +219,42 @@ app.post("/api/v1/logout", (req, res) => {
   res.send({ message: "Logout successful" });
 });
 //-----------------LOGIN CHECK --------------//
-// app.use("/api/v1", (req, res, next) => {
-//   console.log("req.cookies:", req.cookies);
+app.use("/api/v1", (req, res, next) => {
+  console.log("req.cookieses:", req.cookies);
 
-//   if (!req?.cookies?.Token) {
-//     res.status(401).send({
-//       message: "include http-only credentials with every request",
-//     });
-//     return;
-//   }
+  if (!req?.cookies?.Token) {
+    res.status(401).send({
+      message: "include http-only credentials with every request",
+    });
+    return;
+  }
 
-//   jwt.verify(req.cookies.Token, SECRET, function (err, decodedData) {
-//     if (!err) {
-//       console.log("decodedData: ", decodedData);
+  jwt.verify(req.cookies.Token, SECRET, function (err, decodedData) {
+    if (!err) {
+      console.log("decodedData: ", decodedData);
 
-//       const nowDate = new Date().getTime() / 1000;
+      const nowDate = new Date().getTime() / 1000;
 
-//       if (decodedData.exp < nowDate) {
-//         res.status(401);
-//         res.cookie("Token", "", {
-//           maxAge: 1,
-//           httpOnly: true,
-//           sameSite: "none",
-//           secure: true,
-//         });
-//         res.send({ message: "token expired" });
-//       } else {
-//         console.log("token approved");
+      if (decodedData.exp < nowDate) {
+        res.status(401);
+        res.cookie("Token", "", {
+          maxAge: 1,
+          httpOnly: true,
+          sameSite: "none",
+          secure: true,
+        });
+        res.send({ message: "token expired" });
+      } else {
+        console.log("token approved");
 
-//         req.body.token = decodedData;
-//         next();
-//       }
-//     } else {
-//       res.status(401).send("invalid token");
-//     }
-//   });
-// });
+        req.body.token = decodedData;
+        next();
+      }
+    } else {
+      res.status(401).send("invalid token");
+    }
+  });
+});
 //-----------------------------------------//
 //----- ADD PRODUCT API (ADMIN) 4------///
 app.post("/api/v1/product", (req, res) => {
@@ -332,7 +340,7 @@ app.post("/api/v1/category", (req, res) => {
     }
   );
 });
-//-----------//
+//-----Get Categories------//
 app.get("/api/v1/categories", (req, res) => {
   categoryModel.find({}, (err, data) => {
     if (!err) {
@@ -390,9 +398,56 @@ app.post("/api/v1/order", (req, res) => {
   );
 });
 //---------------------------------------///
-
+// -----MT cart APi ----//
+app.post("/api/v1/addCart", (req, res) => {
+  let body = req.body;
+  console.log(req);
+  if (!body.data) {
+    res.status(500).send({
+      message: "Sorry we have found a mistake",
+    });
+    return;
+  }
+  MyCartModel.create(
+    {
+      data: body.data,
+      owner: new mongoose.Types.ObjectId(body.token),
+    },
+    (err, saved) => {
+      if (!err) {
+        console.log("saved", saved);
+        res.send({
+          message: "cart Added",
+          data: saved,
+        });
+      } else {
+        console.log(err);
+        res.send({
+          message: "server Error",
+        });
+      }
+    }
+  );
+});
+app.get("/api/v1/myCart", (req, res) => {
+  const userId = new mongoose.Types.ObjectId(req.body.token._id);
+  MyCartModel.find({ owner: userId, isDeleted: false }, {}, (err, data) => {
+    if (!err) {
+      res.send({
+        message: "Here we go",
+        data: data,
+      });
+    } else {
+      res.status(400).send({
+        message: "server Error",
+      });
+    }
+  });
+});
 //------Get All Products Api's 7----------///
 app.get("/api/v1/products", (req, res) => {
+  const token = req.cookies.token;
+  console.log(token);
   // const userId = new mongoose.Types.ObjectId(req.body.token._id);
   productModel.find({}, (err, data) => {
     if (!err) {
@@ -464,6 +519,7 @@ app.put("/api/v1/product/:id", async (req, res) => {
     });
   }
 });
+
 // -----------------------------------------------//
 const __dirname = path.resolve();
 app.use("/", express.static(path.join(__dirname, "./Frontend/build")));

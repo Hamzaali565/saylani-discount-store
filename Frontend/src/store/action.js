@@ -7,6 +7,7 @@ import {
   BASE_URL,
   SET_LOGIN,
   SET_CART,
+  SET_TOKEN,
 } from './actionType';
 
 export const addition = () => ({
@@ -33,6 +34,10 @@ export const setLogin = login => ({
 
 export const baseurl = () => ({
   type: BASE_URL,
+});
+export const setToken = token => ({
+  type: SET_TOKEN,
+  payload: token,
 });
 export const setCart = cart => ({
   type: SET_CART,

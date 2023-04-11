@@ -3,12 +3,19 @@ import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import AppText from './AppText';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import color from '../config/color';
-const HomeAllProductComponent = () => {
+const HomeAllProductComponent = ({
+  image,
+  productName,
+  price,
+  weight,
+  description,
+  onPress,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
-          source={require('../assets/images/Apple.jpg')}
+          source={{uri: image}}
           style={{height: 100, width: 100}}
           resizeMode="contain"
         />
@@ -17,13 +24,15 @@ const HomeAllProductComponent = () => {
       <View style={styles.container2}>
         {/* product name / price / weight */}
         <View style={styles.PPW}>
-          <AppText style={styles.T1}>Meat</AppText>
-          <AppText style={styles.T1}>Rs.800 - per kg</AppText>
+          <AppText style={styles.T1}>{productName}</AppText>
+          <AppText style={styles.T1}>
+            Rs.{price} - per {weight}
+          </AppText>
         </View>
         {/* Description and add Button */}
         <View style={styles.descAdd}>
           <AppText style={styles.T3} numberOfLines={2}>
-            This is product description This is abc product description
+            {description}
           </AppText>
           <TouchableOpacity
             style={{
@@ -32,7 +41,8 @@ const HomeAllProductComponent = () => {
               alignItems: 'center',
               backgroundColor: color.green,
               borderRadius: 10,
-            }}>
+            }}
+            onPress={onPress}>
             <FontAwesome5
               style={{color: color.white, fontSize: 30}}
               name="plus"

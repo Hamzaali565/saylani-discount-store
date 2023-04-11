@@ -48,20 +48,12 @@ const Cart = () => {
   const [totals, setTotal] = useState('');
   const myData = useSelector(state => state.cart);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   setData(datad);
-  //   console.log(data);
-  // }, [!update]);
+
   useEffect(() => {
     dispatch(setCart(datad));
     console.log('myData', myData);
   }, []);
-  // let check = () => {
-  //   data.map(item => {
-  //     setPrice1(item.price);
-  //   });
-  // };
-  // console.log('price', price);
+  // Add
   const Plus = id => {
     // console.log(myData[0]);
     let price = '';
@@ -86,6 +78,7 @@ const Cart = () => {
     }
     setUpdate(!update);
   };
+  // Subtract
   const Minus = id => {
     let price = '';
     for (i = 0; i < myData.length; i++) {
@@ -107,11 +100,12 @@ const Cart = () => {
     setUpdate(!update);
     console.log('data', data);
   };
+  // Total
   const total = data.reduce((accumulator, currentValue) => {
     return +accumulator + +currentValue.price;
   }, 0);
 
-  console.log(total); // Output: 15
+  console.log(total);
   return (
     <View style={styles.container}>
       {/* profile image */}
@@ -137,9 +131,6 @@ const Cart = () => {
             <CartComponent
               name={item.name}
               price={item.price}
-              // onChangeText={text => {
-              //   setNum(text);
-              // }}
               onPlus={() => {
                 Plus(item._id);
               }}
@@ -151,7 +142,9 @@ const Cart = () => {
           )}
         />
       </View>
+      {/* sepretor */}
       <View style={styles.line} />
+      {/* Total Price */}
       <View style={styles.totalContainer}>
         <AppText style={styles.total}>Total</AppText>
         <AppText style={styles.price}>Pkr {total}</AppText>
