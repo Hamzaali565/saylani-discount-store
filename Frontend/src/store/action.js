@@ -8,6 +8,7 @@ import {
   SET_LOGIN,
   SET_CART,
   SET_TOKEN,
+  SET_CART_NUMBER,
 } from './actionType';
 
 export const addition = () => ({
@@ -42,4 +43,8 @@ export const setToken = token => ({
 export const setCart = cart => ({
   type: SET_CART,
   payload: cart,
+});
+export const setCartNumber = cartNumber => ({
+  type: SET_CART_NUMBER,
+  // payload: cartNumber,
 });

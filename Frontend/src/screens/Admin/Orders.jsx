@@ -35,12 +35,11 @@ const Orders = ({navigation}) => {
   const myobj = useSelector(state => state.object._id);
   // const myobj = '63f5c5766ba8f65c2790d92f';
   const url = useSelector(state => state.url);
+  const token = useSelector(state => state.token);
   const Dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('====================================');
     console.log(myobj);
-    console.log('====================================');
     Categories();
   }, []);
 
@@ -53,7 +52,9 @@ const Orders = ({navigation}) => {
   const Categories = async () => {
     try {
       let response = await axios.get(`${url}/categories`, {
-        withCredentials: true,
+        headers: {
+          Cookie: `Token=${token}`,
+        },
       });
       console.log('response', response.data.data);
       setAllCategories(response.data.data.reverse());
@@ -113,7 +114,9 @@ const Orders = ({navigation}) => {
           categoryName: fullName,
         },
         {
-          withCredentials: true,
+          headers: {
+            Cookie: `Token=${token}`,
+          },
         },
       );
       console.log('response', response);

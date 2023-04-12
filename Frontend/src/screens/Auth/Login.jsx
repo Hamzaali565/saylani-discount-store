@@ -7,10 +7,12 @@ import color from '../../config/color';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {setToken, setAdmin, setLogin, setObject} from '../../store/action';
-const Login = ({navigation}) => {
+const Login = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordState, setPasswordState] = useState(false);
+  const user = route.params;
+  console.log('user', user);
   const Dispatch = useDispatch();
   const myobj = useSelector(state => state.object);
   const admin = useSelector(state => state.boolean);
@@ -19,8 +21,14 @@ const Login = ({navigation}) => {
   useEffect(() => {
     console.log('data', url);
     console.log('LOGIN', login);
+    if (user) {
+      RoutesValue();
+    }
   }, []);
-
+  const RoutesValue = () => {
+    setEmail(user.email);
+    setPassword(user.password);
+  };
   const Move = async () => {
     console.log('====================================');
     console.log('my', myobj);
@@ -38,10 +46,10 @@ const Login = ({navigation}) => {
         },
       );
       console.log(response.data.profile);
+      Dispatch(setToken(response.data.profile.token));
       Dispatch(setObject(response.data.profile));
       Dispatch(setAdmin(response.data.profile.admin));
       Dispatch(setLogin(true));
-      Dispatch(setToken(response.data.profile.token));
       console.log('response.data.profile.token', response.data.profile.token);
     } catch (err) {
       console.log(err);
@@ -59,6 +67,7 @@ const Login = ({navigation}) => {
           iconName="user-circle"
           iconStyle={{color: color.grey}}
           keyboardType="email-address"
+          value={email}
           onChangeText={text => {
             setEmail(text);
           }}
@@ -68,7 +77,7 @@ const Login = ({navigation}) => {
           placeholder="Password"
           iconName={!passwordState ? 'eye' : 'eye-slash'}
           iconStyle={{color: color.grey}}
-          // keyboardType="email-address"
+          value={password}
           secure={!passwordState ? true : false}
           onChangeText={text => {
             setPassword(text);
@@ -84,7 +93,13 @@ const Login = ({navigation}) => {
           <AppButton1 title="Sign In" onPress={Move} />
         </View>
         <TouchableOpacity style={styles.register}>
-          <AppText style={styles.text4}>Don't have an account?Register</AppText>
+          <AppText
+            style={styles.text4}
+            onPress={() => {
+              navigation.navigate('SignUp');
+            }}>
+            Don't have an account?Register
+          </AppText>
         </TouchableOpacity>
       </View>
     </ScrollView>

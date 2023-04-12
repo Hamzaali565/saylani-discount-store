@@ -7,3 +7,4 @@ export const SET_ADMIN = 'SET_ADMIN';
 export const SET_LOGIN = 'SET_LOGIN';
 export const BASE_URL = 'BASE_URL';
 export const SET_TOKEN = 'SET_TOKEN';
+export const SET_CART_NUMBER = 'SET_CART_NUMBER';

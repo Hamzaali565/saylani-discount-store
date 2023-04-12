@@ -4,6 +4,7 @@ import AppText from './AppText';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import color from '../config/color';
 import {useNavigation} from '@react-navigation/native';
+
 const HeaderType = ({
   iconStyle,
   iconName,
@@ -16,6 +17,7 @@ const HeaderType = ({
   const Move = () => {
     navigate.navigate('CartScreen');
   };
+
   return (
     <View style={[styles.container, style]}>
       <View style={styles.ticon}>

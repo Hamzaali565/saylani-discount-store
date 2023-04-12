@@ -36,6 +36,7 @@ const AddNewItem = ({navigation}) => {
 
   const Navi = useNavigation();
   const url = useSelector(state => state.url);
+  const token = useSelector(state => state.token);
   // console.log(categoryText);
   const DATEIS = () => {
     Navi.pop();
@@ -97,7 +98,9 @@ const AddNewItem = ({navigation}) => {
           unitPrice: unitPrice,
         },
         {
-          withCredentials: true,
+          headers: {
+            Cookie: `Token=${token}`,
+          },
         },
       );
       console.log('response', response);

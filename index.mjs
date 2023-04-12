@@ -401,7 +401,7 @@ app.post("/api/v1/order", (req, res) => {
 // -----MT cart APi ----//
 app.post("/api/v1/addCart", (req, res) => {
   let body = req.body;
-  console.log(req);
+  console.log(req.body);
   if (!body.data) {
     res.status(500).send({
       message: "Sorry we have found a mistake",
@@ -411,7 +411,7 @@ app.post("/api/v1/addCart", (req, res) => {
   MyCartModel.create(
     {
       data: body.data,
-      owner: new mongoose.Types.ObjectId(body.token),
+      owner: new mongoose.Types.ObjectId(body.token._id),
     },
     (err, saved) => {
       if (!err) {

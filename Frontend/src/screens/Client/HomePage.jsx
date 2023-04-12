@@ -6,38 +6,47 @@ import {
 import axios from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, ScrollView, Image, StyleSheet, FlatList} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import AppText from '../../components/AppText';
 import HeaderType from '../../components/HeaderType';
 import HomeAllProductComponent from '../../components/HomeAllProductComponent';
 import IconInput from '../../components/IconInput';
 import MiniCard from '../../components/MiniCard';
+import {setCartNumber} from '../../store/action';
 const HomePage = () => {
   let navigation = useNavigation();
   const [data, setData] = useState([]);
+  const [cartLength, setCartLength] = useState([]);
   const url = useSelector(state => state.url);
+  const token = useSelector(state => state.token);
   const focus = useIsFocused();
-  console.log('url, ', url);
-
+  const Dispatch = useDispatch();
+  let CartNumber = useSelector(state => state.cartNumber);
+  console.log('countNumber', CartNumber);
   useEffect(() => {
     // whenever you are in the current screen, it will be true vice versa
     if (focus == true) {
       // if condition required here because it will call the function even when you are not focused in the screen as well, because we passed it as a dependencies to useEffect hook
       getData();
+      MyCart();
       console.log('ok');
     }
   }, [focus]);
+  // get data
   const getData = async () => {
     try {
       let response = await axios.get(`${url}/api/v1/products`, {
-        withCredentials: true,
+        headers: {
+          Cookie: `Token=${token}`,
+        },
       });
-      console.log('response', response.data.data);
+      // console.log('response', response.data.data);
       setData(response.data.data);
     } catch (error) {
       console.log('error', error);
     }
   };
+  // Add to cart
   const AddToCart = async item => {
     console.log('item', item);
     try {
@@ -45,10 +54,33 @@ const HomePage = () => {
         `${url}/api/v1/addCart`,
         {data: item},
         {
-          withCredentials: true,
+          headers: {
+            Cookie: `Token=${token}`,
+          },
         },
       );
+      Dispatch(setCartNumber());
       console.log('response', response.data);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  // AllCart
+  const MyCart = async () => {
+    try {
+      let response = await axios.get(`${url}/api/v1/myCart`, {
+        headers: {
+          Cookie: `Token=${token}`,
+        },
+      });
+      let data = response.data.data;
+      let array = [];
+      let mappedData = data.map(obj => array.push(obj.data));
+      let mappedDataq = data.map(obj => console.log('new', obj.data));
+      // CartNumber = useSelector(state => state.cartNumber);
+      let num = array.length;
+      console.log('reponseD', num);
+      // Dispatch(setCartNumber(num));
     } catch (error) {
       console.log('error', error);
     }
@@ -77,7 +109,11 @@ const HomePage = () => {
   const unsubscribe = navigation.removeListener('didFocus', getData);
   return (
     <View style={styles.container}>
-      <HeaderType iconName="cart-plus" subHeading="DISCOUNT STORE" count="7" />
+      <HeaderType
+        iconName="cart-plus"
+        subHeading="DISCOUNT STORE"
+        count={CartNumber.toString()}
+      />
       <ScrollView>
         <View style={styles.imageContainer}>
           <Image

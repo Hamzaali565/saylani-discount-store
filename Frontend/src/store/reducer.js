@@ -8,6 +8,7 @@ import {
   SET_LOGIN,
   SET_CART,
   SET_TOKEN,
+  SET_CART_NUMBER,
 } from './actionType';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   url: 'http://192.168.3.105:3001',
   cart: null,
   token: null,
+  cartNumber: 0,
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -57,6 +59,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         token: action.payload,
+      };
+    case SET_CART_NUMBER:
+      return {
+        ...state,
+        cartNumber: state.cartNumber + 1,
       };
     default:
       return state;

@@ -14,6 +14,7 @@ const IconInput = ({
   secure,
   styleContainer,
   maxLength,
+  value,
   onpress,
 }) => {
   return (
@@ -32,6 +33,7 @@ const IconInput = ({
           onChangeText={onChangeText}
           maxLength={maxLength}
           placeholderTextColor={color.grey}
+          value={value}
           style={{
             color: 'black',
             borderBottomColor: color.blue,
