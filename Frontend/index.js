@@ -15,7 +15,7 @@ const Apps = () => {
     </Provider>
   );
 };
-AppRegistry.registerComponent(appName, () => Apps);
+AppRegistry.registerComponent(appName, () => Apps)
 
 // const AppWrapper = () => {
 //   const store = createStore(rootReducer);
